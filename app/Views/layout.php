@@ -15,6 +15,7 @@
     </style>
 </head>
 <body>
+<!-- Entete global avec navigation principale. -->
 <header>
     <nav>
         <a href="/">Accueil</a>
@@ -22,6 +23,7 @@
     </nav>
 </header>
 <main>
+    <!-- Ici, on injecte le contenu de la vue courante. -->
     <?= $content ?>
 </main>
 <footer>

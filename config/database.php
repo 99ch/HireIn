@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+// Parametres de connexion base de donnees, lus depuis .env (ou valeurs par defaut).
 return [
     'driver' => getenv('DB_DRIVER') ?: 'mysql',
     'host' => getenv('DB_HOST') ?: '127.0.0.1',

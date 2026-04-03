@@ -8,8 +8,10 @@ use App\Core\Controller;
 
 final class OfferController extends Controller
 {
+    // Action qui affiche la liste des offres.
     public function index(): void
     {
+        // Donnees d'exemple temporaires (elles viendront plus tard de la base de donnees).
         $offers = [
             [
                 'title' => 'Stage Developpement Web',
@@ -31,6 +33,7 @@ final class OfferController extends Controller
             ],
         ];
 
+        // Envoie les offres a la vue pour affichage.
         $this->view('offers.index', [
             'title' => 'HireIn - Offres',
             'offers' => $offers,

@@ -6,6 +6,7 @@ namespace App\Core;
 
 final class View
 {
+    // Charge une vue enfant, puis l'injecte dans le layout principal.
     /** @param array<string, mixed> $data */
     public static function render(string $view, array $data = []): void
     {
@@ -18,12 +19,15 @@ final class View
             return;
         }
 
+        // Rend les variables du tableau accessibles dans la vue (ex: $title, $offers).
         extract($data, EXTR_SKIP);
 
+        // Capture le HTML de la vue enfant dans $content.
         ob_start();
         require $viewFile;
         $content = (string) ob_get_clean();
 
+        // Applique le layout commun (entete, pied de page, styles).
         require $viewsPath . '/layout.php';
     }
 }

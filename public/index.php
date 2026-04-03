@@ -6,12 +6,14 @@ use App\Controllers\HomeController;
 use App\Controllers\OfferController;
 use App\Core\Router;
 
+// Autoload minimal: charge automatiquement les classes du namespace App\.
 spl_autoload_register(function (string $class): void {
     $prefix = 'App\\';
     if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
         return;
     }
 
+    // Convertit App\Core\Router en chemin de fichier app/Core/Router.php.
     $relativeClass = substr($class, strlen($prefix));
     $file = __DIR__ . '/../app/' . str_replace('\\', '/', $relativeClass) . '.php';
 
@@ -20,10 +22,12 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
+// Declaration des routes GET de l'application.
 $router = new Router();
 $router->get('/', [HomeController::class, 'index']);
 $router->get('/offres', [OfferController::class, 'index']);
 
+// Recupere la requete HTTP courante puis la confie au routeur.
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $router->dispatch($method, is_string($path) ? $path : '/');

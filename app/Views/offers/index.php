@@ -3,8 +3,10 @@
     <p class="meta">Exemples d'offres pour le demarrage du projet.</p>
 </section>
 
+<?php // Parcourt chaque offre transmise par le controleur. ?>
 <?php foreach (($offers ?? []) as $offer): ?>
     <article class="card">
+        <?php // htmlspecialchars protege contre l'injection HTML/XSS. ?>
         <h2><?= htmlspecialchars((string) $offer['title'], ENT_QUOTES, 'UTF-8') ?></h2>
         <p class="meta">
             <?= htmlspecialchars((string) $offer['company'], ENT_QUOTES, 'UTF-8') ?>

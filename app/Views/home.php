@@ -1,3 +1,4 @@
+<!-- Bloc de presentation generale du projet. -->
 <section class="card">
     <h1>HireIn</h1>
     <p>
@@ -10,6 +11,7 @@
     </p>
 </section>
 
+<!-- Bloc qui resume les fonctions deja disponibles dans le prototype. -->
 <section class="card">
     <h2>Premieres fonctionnalites disponibles</h2>
     <ul>
