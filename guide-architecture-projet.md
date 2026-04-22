@@ -199,4 +199,3 @@ Le projet est organise autour d un noyau MVC simple:
 - layout applique l interface commune,
 - database/schema.sql et Database.php preparent la persistence.
 
-Cette architecture est propre, lisible et defendable devant un jury.
