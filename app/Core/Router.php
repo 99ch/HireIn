@@ -33,7 +33,8 @@ final class Router
         $method = strtoupper($method);
         $normalizedPath = $this->normalize($path);
 
-        $handler = $this->routes[$method][$normalizedPath] ?? null;
+        $handlers = $this->routes[$method] ?? [];
+        $handler = $handlers[$normalizedPath] ?? null;
         if ($handler === null) {
             http_response_code(404);
             echo '404 - Page not found';
