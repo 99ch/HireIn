@@ -37,11 +37,16 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Initialise le conteneur de dépendances avec la DB.
 $dbConfig = require __DIR__ . '/../config/database.php';
 $database = new Database($dbConfig);
 Container::set('db', $database->connect());
-// Declaration des routes GET de l'application.
+
+// Declaration des routes GET/POST de l'application.
 $router = new Router();
 $router->get('/', [HomeController::class, 'index']);
 $router->get('/a-propos', [HomeController::class, 'about']);
@@ -50,8 +55,12 @@ $router->get('/offres/detail', [OfferController::class, 'show']);
 $router->get('/profils', [ProfileController::class, 'index']);
 $router->get('/entreprises', [CompanyController::class, 'index']);
 $router->get('/inscription', [AuthController::class, 'registerStudent']);
+$router->post('/inscription', [AuthController::class, 'registerStudentSubmit']);
 $router->get('/inscription-entreprise', [AuthController::class, 'registerCompany']);
+$router->post('/inscription-entreprise', [AuthController::class, 'registerCompanySubmit']);
 $router->get('/espace-entreprise', [AuthController::class, 'companySpace']);
+$router->post('/connexion', [AuthController::class, 'loginSubmit']);
+$router->post('/deconnexion', [AuthController::class, 'logoutSubmit']);
 
 // Recupere la requete HTTP courante puis la confie au routeur.
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
