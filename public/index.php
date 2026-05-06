@@ -51,6 +51,7 @@ $router = new Router();
 $router->get('/', [HomeController::class, 'index']);
 $router->get('/a-propos', [HomeController::class, 'about']);
 $router->get('/offres', [OfferController::class, 'index']);
+$router->post('/offres/publier', [OfferController::class, 'store']);
 $router->get('/offres/detail', [OfferController::class, 'show']);
 $router->get('/profils', [ProfileController::class, 'index']);
 $router->get('/entreprises', [CompanyController::class, 'index']);

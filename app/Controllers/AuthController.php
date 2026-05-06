@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Core\Container;
 use App\Core\Controller;
+use App\Repositories\OfferRepository;
 use App\Repositories\UserRepository;
 use RuntimeException;
 
@@ -36,11 +37,20 @@ final class AuthController extends Controller
     // Page de connexion et espace entreprise.
     public function companySpace(): void
     {
+        $authUser = $_SESSION['auth'] ?? null;
+        $companyOffers = [];
+
+        if (is_array($authUser) && ($authUser['role'] ?? '') === 'entreprise' && Container::has('db')) {
+            $offerRepository = new OfferRepository(Container::get('db'));
+            $companyOffers = $offerRepository->getByCompanyUserId((int) $authUser['id']);
+        }
+
         $this->view('auth.company-space', [
             'title' => 'HireIn - Espace Entreprise',
             'activeNav' => 'offers',
             'flash' => $this->pullFlash(),
-            'authUser' => $_SESSION['auth'] ?? null,
+            'authUser' => $authUser,
+            'companyOffers' => $companyOffers,
         ]);
     }
 

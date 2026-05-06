@@ -8,11 +8,8 @@ use PDO;
 
 final class OfferRepository
 {
-    private PDO $db;
-
-    public function __construct(PDO $db)
+    public function __construct(private PDO $db)
     {
-        $this->db = $db;
     }
 
     /**
@@ -119,5 +116,46 @@ final class OfferRepository
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return (int) ($result['total'] ?? 0);
+    }
+
+    /**
+     * @param array<string, string> $data
+     */
+    public function create(int $companyUserId, array $data): int
+    {
+        $stmt = $this->db->prepare(
+            'INSERT INTO offers (company_user_id, title, contract_type, city, description, deadline, status)
+             VALUES (:company_user_id, :title, :contract_type, :city, :description, :deadline, :status)'
+        );
+
+        $stmt->execute([
+            ':company_user_id' => $companyUserId,
+            ':title' => $data['title'],
+            ':contract_type' => $data['contract_type'],
+            ':city' => $data['city'],
+            ':description' => $data['description'],
+            ':deadline' => $data['deadline'] !== '' ? $data['deadline'] : null,
+            ':status' => 'open',
+        ]);
+
+        return (int) $this->db->lastInsertId();
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function getByCompanyUserId(int $companyUserId): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT id, title, contract_type, city, status, created_at
+             FROM offers
+             WHERE company_user_id = :company_user_id
+             ORDER BY created_at DESC
+             LIMIT 6'
+        );
+
+        $stmt->execute([':company_user_id' => $companyUserId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

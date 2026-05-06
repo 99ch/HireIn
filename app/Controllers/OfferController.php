@@ -83,6 +83,48 @@ final class OfferController extends Controller
         ]);
     }
 
+    public function store(): void
+    {
+        $auth = $_SESSION['auth'] ?? null;
+        if (!is_array($auth) || ($auth['role'] ?? '') !== 'entreprise') {
+            $this->flashError('Connexion entreprise requise pour publier une offre.');
+            $this->redirect('/espace-entreprise');
+        }
+
+        $title = trim((string) ($_POST['title'] ?? ''));
+        $city = trim((string) ($_POST['city'] ?? ''));
+        $contractType = trim((string) ($_POST['contract_type'] ?? ''));
+        $description = trim((string) ($_POST['description'] ?? ''));
+        $deadline = trim((string) ($_POST['deadline'] ?? ''));
+
+        if ($title === '' || $city === '' || $contractType === '' || $description === '') {
+            $this->flashError('Veuillez remplir tous les champs obligatoires de l\'offre.');
+            $this->redirect('/espace-entreprise');
+        }
+
+        if (!in_array($contractType, ['stage', 'cdd', 'job_etudiant'], true)) {
+            $this->flashError('Type de contrat invalide.');
+            $this->redirect('/espace-entreprise');
+        }
+
+        if (!Container::has('db')) {
+            $this->flashError('Connexion base de donnees indisponible.');
+            $this->redirect('/espace-entreprise');
+        }
+
+        $offerRepository = new OfferRepository(Container::get('db'));
+        $offerRepository->create((int) $auth['id'], [
+            'title' => $title,
+            'city' => $city,
+            'contract_type' => $contractType,
+            'description' => $description,
+            'deadline' => $deadline,
+        ]);
+
+        $this->flashSuccess('Offre publiee avec succes.');
+        $this->redirect('/espace-entreprise');
+    }
+
     // Action qui affiche une offre en detail.
     public function show(): void
     {
@@ -170,5 +212,21 @@ final class OfferController extends Controller
     private function formatTimeLabel(string $deadline): string
     {
         return $deadline !== '' ? 'Date limite: ' . $deadline : 'Temps plein';
+    }
+
+    private function flashError(string $message): void
+    {
+        $_SESSION['flash'] = ['type' => 'error', 'message' => $message];
+    }
+
+    private function flashSuccess(string $message): void
+    {
+        $_SESSION['flash'] = ['type' => 'success', 'message' => $message];
+    }
+
+    private function redirect(string $path): never
+    {
+        header('Location: ' . $path);
+        exit;
     }
 }
