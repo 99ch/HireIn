@@ -6,6 +6,8 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 
+use App\Core\Container;
+use App\Repositories\OfferRepository;
 final class OfferController extends Controller
 {
     // Action qui affiche la liste des offres.
@@ -22,38 +24,11 @@ final class OfferController extends Controller
             'Agro alimentaire',
         ];
 
-        // Donnees d'exemple temporaires (elles viendront plus tard de la base de donnees).
-        $offers = [
-            [
-                'title' => 'Stage en Marketing',
-                'subtitle' => 'Subheading',
-                'type' => 'Stage professionnel',
-                'time' => 'Temps plein',
-                'city' => 'Cotonou',
-            ],
-            [
-                'title' => 'CDD Analyste Data',
-                'subtitle' => 'Subheading',
-                'type' => 'CDD',
-                'time' => 'Temps plein',
-                'city' => 'Porto-Novo',
-            ],
-            [
-                'title' => 'Aide cuisinier - Job a temps partiel',
-                'subtitle' => 'Subheading',
-                'type' => 'Job etudiant',
-                'time' => 'Temps partiel',
-                'city' => 'Calavi',
-            ],
-            [
-                'title' => 'CDD Designer Graphique',
-                'subtitle' => 'Subheading',
-                'type' => 'CDD',
-                'time' => 'Temps plein',
-                'city' => 'Parakou',
-            ],
-        ];
 
+        // Recupere les offres depuis le repository (base de donnees).
+        $db = Container::get('db');
+        $offerRepository = new OfferRepository($db);
+        $offers = $offerRepository->getAll(limit: 20, offset: 0);
         // Envoie les offres a la vue pour affichage.
         $this->view('offers.index', [
             'title' => 'HireIn - Offres',

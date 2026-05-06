@@ -8,6 +8,8 @@ use App\Controllers\HomeController;
 use App\Controllers\OfferController;
 use App\Controllers\ProfileController;
 use App\Core\Router;
+use App\Core\Container;
+use App\Core\Database;
 
 // Permet au serveur PHP integre de servir directement les fichiers statiques.
 if (PHP_SAPI === 'cli-server') {
@@ -35,6 +37,10 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
+// Initialise le conteneur de dépendances avec la DB.
+$dbConfig = require __DIR__ . '/../config/database.php';
+$database = new Database($dbConfig);
+Container::set('db', $database->connect());
 // Declaration des routes GET de l'application.
 $router = new Router();
 $router->get('/', [HomeController::class, 'index']);
