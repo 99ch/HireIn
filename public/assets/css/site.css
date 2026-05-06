@@ -858,6 +858,10 @@ button {
     grid-column: 1 / -1;
 }
 
+.form-grid-full {
+    grid-column: 1 / -1;
+}
+
 .upload-row {
     display: flex;
     align-items: center;
@@ -908,6 +912,26 @@ button {
 .auth-bottom-text a {
     color: var(--orange);
     font-weight: 700;
+}
+
+.flash-message {
+    margin: 12px auto;
+    width: min(760px, 92vw);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 600;
+}
+
+.flash-error {
+    background: #ffe8e8;
+    border: 1px solid #e8b1b1;
+    color: #8a1d1d;
+}
+
+.flash-success {
+    background: #e8f8ea;
+    border: 1px solid #b2ddb8;
+    color: #1b6b2c;
 }
 
 .pricing-wrap {
@@ -1000,6 +1024,11 @@ button {
     display: grid;
     gap: 8px;
     margin-top: 10px;
+}
+
+.login-form {
+    display: grid;
+    gap: 10px;
 }
 
 .login-panel input {
