@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\AuthMiddleware;
 use App\Core\Controller;
 use App\Core\Container;
 use App\Repositories\OfferRepository;
@@ -85,11 +86,11 @@ final class OfferController extends Controller
 
     public function store(): void
     {
-        $auth = $_SESSION['auth'] ?? null;
-        if (!is_array($auth) || ($auth['role'] ?? '') !== 'entreprise') {
-            $this->flashError('Connexion entreprise requise pour publier une offre.');
-            $this->redirect('/espace-entreprise');
-        }
+        $auth = AuthMiddleware::requireAuth(
+            'entreprise',
+            '/espace-entreprise',
+            'Connexion entreprise requise pour publier une offre.'
+        );
 
         $title = trim((string) ($_POST['title'] ?? ''));
         $city = trim((string) ($_POST['city'] ?? ''));
@@ -202,11 +203,11 @@ final class OfferController extends Controller
     // Action qui affiche le formulaire de candidature.
     public function apply(): void
     {
-        $auth = $_SESSION['auth'] ?? null;
-        if (!is_array($auth) || ($auth['role'] ?? '') !== 'etudiant') {
-            $this->flashError('Connexion etudiant requise pour candidater.');
-            $this->redirect('/inscription');
-        }
+        AuthMiddleware::requireAuth(
+            'etudiant',
+            '/inscription',
+            'Connexion etudiant requise pour candidater.'
+        );
 
         $offerId = (int) ($_GET['id'] ?? 0);
         if ($offerId <= 0) {
@@ -248,11 +249,11 @@ final class OfferController extends Controller
     // Action qui traite la soumission de candidature.
     public function submitApplication(): void
     {
-        $auth = $_SESSION['auth'] ?? null;
-        if (!is_array($auth) || ($auth['role'] ?? '') !== 'etudiant') {
-            $this->flashError('Connexion etudiant requise pour candidater.');
-            $this->redirect('/inscription');
-        }
+        $auth = AuthMiddleware::requireAuth(
+            'etudiant',
+            '/inscription',
+            'Connexion etudiant requise pour candidater.'
+        );
 
         $offerId = (int) ($_POST['offer_id'] ?? 0);
         if ($offerId <= 0) {
