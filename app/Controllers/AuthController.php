@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\AuthMiddleware;
 use App\Core\Container;
 use App\Core\Controller;
 use App\Repositories\OfferRepository;
@@ -203,11 +204,11 @@ final class AuthController extends Controller
     // Page du tableau de bord etudiant affichant les candidatures.
     public function studentApplications(): void
     {
-        $authUser = $_SESSION['auth'] ?? null;
-        if (!is_array($authUser) || ($authUser['role'] ?? '') !== 'etudiant') {
-            $this->flashError('Connexion etudiant requise.');
-            $this->redirect('/inscription');
-        }
+        $authUser = AuthMiddleware::requireAuth(
+            'etudiant',
+            '/inscription',
+            'Connexion etudiant requise.'
+        );
 
         $applications = [];
         if (Container::has('db')) {
