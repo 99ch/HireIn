@@ -16,6 +16,8 @@ final class AuthController extends Controller
     // Page d'inscription etudiant.
     public function registerStudent(): void
     {
+        AuthMiddleware::requireGuest('/espace-entreprise');
+
         $this->view('auth.register-student', [
             'title' => 'HireIn - Inscription Etudiant',
             'activeNav' => 'profiles',
@@ -27,6 +29,8 @@ final class AuthController extends Controller
     // Page d'inscription entreprise.
     public function registerCompany(): void
     {
+        AuthMiddleware::requireGuest('/espace-entreprise');
+
         $this->view('auth.register-company', [
             'title' => 'HireIn - Inscription Entreprise',
             'activeNav' => 'profiles',
@@ -40,6 +44,11 @@ final class AuthController extends Controller
     {
         $authUser = $_SESSION['auth'] ?? null;
         $companyOffers = [];
+
+        if (is_array($authUser) && ($authUser['role'] ?? '') === 'etudiant') {
+            $this->flashError('Acces reserve aux entreprises.');
+            $this->redirect('/profil/candidatures');
+        }
 
         if (is_array($authUser) && ($authUser['role'] ?? '') === 'entreprise' && Container::has('db')) {
             $offerRepository = new OfferRepository(Container::get('db'));
@@ -57,6 +66,8 @@ final class AuthController extends Controller
 
     public function registerStudentSubmit(): void
     {
+        AuthMiddleware::requireGuest('/espace-entreprise');
+
         $fullname = trim((string) ($_POST['fullname'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
@@ -113,6 +124,8 @@ final class AuthController extends Controller
 
     public function registerCompanySubmit(): void
     {
+        AuthMiddleware::requireGuest('/espace-entreprise');
+
         $companyName = trim((string) ($_POST['company_name'] ?? ''));
         $recruiterName = trim((string) ($_POST['recruiter_name'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
@@ -169,6 +182,8 @@ final class AuthController extends Controller
 
     public function loginSubmit(): void
     {
+        AuthMiddleware::requireGuest('/espace-entreprise');
+
         $email = trim((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
