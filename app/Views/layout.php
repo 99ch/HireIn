@@ -19,7 +19,9 @@
 
         <nav class="main-nav" aria-label="Navigation principale">
             <a class="<?= $activeNav === 'home' ? 'is-active' : '' ?>" href="/">Accueil</a>
-            <a class="<?= $activeNav === 'profiles' ? 'is-active' : '' ?>" href="/profils">Profile</a>
+            <a class="<?= $activeNav === 'offers' ? 'is-active' : '' ?>" href="/offres">Offres</a>
+            <a class="<?= $activeNav === 'profiles' ? 'is-active' : '' ?>" href="/profils">Profils</a>
+            <a class="<?= $activeNav === 'companies' ? 'is-active' : '' ?>" href="/entreprises">Entreprises</a>
             <a class="<?= $activeNav === 'about' ? 'is-active' : '' ?>" href="/a-propos">A propos</a>
         </nav>
 
