@@ -1,4 +1,45 @@
 # HireIn
+
+## Demarrage local (Quick start)
+
+### 1) Pre-requis
+- PHP 8.2+
+- MySQL 8.x
+
+### 2) Creer la base et importer le schema
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -e "CREATE DATABASE IF NOT EXISTS hirein CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -h 127.0.0.1 -P 3306 -u root hirein < database/schema.sql
+```
+
+### 3) (Optionnel) Creer un utilisateur MySQL dedie
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -e "CREATE USER IF NOT EXISTS 'hirein'@'localhost' IDENTIFIED BY 'CHANGE_ME';"
+mysql -h 127.0.0.1 -P 3306 -u root -e "GRANT ALL PRIVILEGES ON hirein.* TO 'hirein'@'localhost'; FLUSH PRIVILEGES;"
+```
+
+Mettre ensuite a jour les identifiants dans config/database.php.
+
+### 4) Lancer le serveur PHP
+```bash
+php -S localhost:8000 -t public
+```
+
+Puis ouvrir http://localhost:8000
+
+### 5) Acces base de donnees
+Via terminal :
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root hirein
+```
+
+Via phpMyAdmin :
+- Host: 127.0.0.1
+- Port: 3306
+- User: root (ou votre utilisateur dedie)
+- Password: (vide si root sans mot de passe)
+- Database: hirein
+
 <h2>Application web « HireIn : Stage, Job étudiant, CDD »</h2>
 
 <p>Le marché de l’emploi au Bénin présente un défi particulier pour les étudiants et les jeunes diplômés qui ont souvent des difficultés à accéder aux opportunités de stages, CDD et emplois étudiants. Sachant qu’une expérience professionnelle ou la clôture d’un cicle universitaire passe d’abord par un stage en entreprise, il devient impératif de résoudre cette problématique pour faciliter aux jeunes comme nous, une immersion sans stress dans la sphère professionnelle en entreprise partout au Bénin. </p>
