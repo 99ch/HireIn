@@ -33,6 +33,7 @@ final class OfferController extends Controller
 
             foreach ($rows as $row) {
                 $offers[] = [
+                    'id' => (int) ($row['id'] ?? 0),
                     'title' => (string) ($row['title'] ?? ''),
                     'subtitle' => trim((string) ($row['company_name'] ?? '') . ' - ' . (string) ($row['sector'] ?? '')),
                     'type' => $this->formatContractType((string) ($row['contract_type'] ?? '')),
@@ -45,6 +46,7 @@ final class OfferController extends Controller
         if ($offers === []) {
             $offers = [
                 [
+                    'id' => 1,
                     'title' => 'Stage en Marketing',
                     'subtitle' => 'Subheading',
                     'type' => 'Stage professionnel',
@@ -52,6 +54,7 @@ final class OfferController extends Controller
                     'city' => 'Cotonou',
                 ],
                 [
+                    'id' => 2,
                     'title' => 'CDD Analyste Data',
                     'subtitle' => 'Subheading',
                     'type' => 'CDD',
@@ -59,6 +62,7 @@ final class OfferController extends Controller
                     'city' => 'Porto-Novo',
                 ],
                 [
+                    'id' => 3,
                     'title' => 'Aide cuisinier - Job a temps partiel',
                     'subtitle' => 'Subheading',
                     'type' => 'Job etudiant',
@@ -66,6 +70,7 @@ final class OfferController extends Controller
                     'city' => 'Calavi',
                 ],
                 [
+                    'id' => 4,
                     'title' => 'CDD Designer Graphique',
                     'subtitle' => 'Subheading',
                     'type' => 'CDD',

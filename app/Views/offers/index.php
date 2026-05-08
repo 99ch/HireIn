@@ -58,8 +58,9 @@
 
                     <div class="offer-card-actions">
                         <div class="placeholder-thumb"></div>
-                        <a class="btn-solid" href="#">Postuler</a>
-                        <a class="text-link" href="/offres/detail">Plus d'info</a>
+                        <?php $offerId = (int) ($offer['id'] ?? 0); ?>
+                        <a class="btn-solid" href="<?= $offerId > 0 ? '/offres/candidater?id=' . $offerId : '#' ?>">Postuler</a>
+                        <a class="text-link" href="<?= $offerId > 0 ? '/offres/detail?id=' . $offerId : '/offres/detail' ?>">Plus d'info</a>
                     </div>
                 </article>
             <?php endforeach; ?>
