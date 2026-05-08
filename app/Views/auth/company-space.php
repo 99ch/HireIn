@@ -58,6 +58,8 @@
         <div class="dashboard-actions">
             <button class="btn-accent" type="button">Modifier</button>
 
+            <a class="btn-solid" href="/entreprise/candidatures">Voir les candidatures</a>
+
             <?php if (is_array($authUser)): ?>
                 <form action="/deconnexion" method="post">
                     <button class="btn-outline" type="submit">Deconnexion</button>
