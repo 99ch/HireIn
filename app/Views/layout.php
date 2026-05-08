@@ -8,6 +8,7 @@
 </head>
 <body>
 <?php $activeNav = $activeNav ?? ''; ?>
+<?php $authUser = $_SESSION['auth'] ?? null; ?>
 
 <header class="site-header">
     <div class="site-shell header-inner">
@@ -23,8 +24,17 @@
         </nav>
 
         <div class="auth-links">
-            <a class="btn-outline" href="/inscription">S'inscrire</a>
-            <a class="btn-solid" href="/espace-entreprise">Se connecter</a>
+            <?php if (is_array($authUser)): ?>
+                <?php if (($authUser['role'] ?? '') === 'entreprise'): ?>
+                    <a class="btn-outline" href="/entreprise/candidatures">Candidatures</a>
+                <?php endif; ?>
+                <form action="/deconnexion" method="post" style="display: inline;">
+                    <button class="btn-solid" type="submit">Se deconnecter</button>
+                </form>
+            <?php else: ?>
+                <a class="btn-outline" href="/inscription">S'inscrire</a>
+                <a class="btn-solid" href="/espace-entreprise">Se connecter</a>
+            <?php endif; ?>
         </div>
     </div>
 </header>
