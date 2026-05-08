@@ -64,6 +64,7 @@ $router->post('/inscription-entreprise', [AuthController::class, 'registerCompan
 $router->get('/espace-entreprise', [AuthController::class, 'companySpace']);
 $router->post('/connexion', [AuthController::class, 'loginSubmit']);
 $router->post('/deconnexion', [AuthController::class, 'logoutSubmit']);
+$router->get('/profil/candidatures', [AuthController::class, 'studentApplications']);
 
 // Recupere la requete HTTP courante puis la confie au routeur.
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';

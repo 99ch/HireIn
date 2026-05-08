@@ -200,6 +200,29 @@ final class AuthController extends Controller
         $this->redirect('/espace-entreprise');
     }
 
+    // Page du tableau de bord etudiant affichant les candidatures.
+    public function studentApplications(): void
+    {
+        $authUser = $_SESSION['auth'] ?? null;
+        if (!is_array($authUser) || ($authUser['role'] ?? '') !== 'etudiant') {
+            $this->flashError('Connexion etudiant requise.');
+            $this->redirect('/inscription');
+        }
+
+        $applications = [];
+        if (Container::has('db')) {
+            $applicationRepository = new \App\Repositories\ApplicationRepository(Container::get('db'));
+            $applications = $applicationRepository->getByStudent((int) $authUser['id'], 50, 0);
+        }
+
+        $this->view('profile.applications', [
+            'title' => 'HireIn - Mes Candidatures',
+            'activeNav' => 'profiles',
+            'flash' => $this->pullFlash(),
+            'applications' => $applications,
+        ]);
+    }
+
     private function userRepository(): UserRepository
     {
         if (!Container::has('db')) {
