@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Core\AuthMiddleware;
 use App\Core\Container;
 use App\Core\Controller;
+use App\Repositories\ApplicationRepository;
 use App\Repositories\OfferRepository;
 use App\Repositories\UserRepository;
 use RuntimeException;
@@ -61,6 +62,29 @@ final class AuthController extends Controller
             'flash' => $this->pullFlash(),
             'authUser' => $authUser,
             'companyOffers' => $companyOffers,
+        ]);
+    }
+
+    // Page des candidatures recues par l'entreprise.
+    public function companyApplications(): void
+    {
+        $authUser = AuthMiddleware::requireAuth(
+            'entreprise',
+            '/espace-entreprise',
+            'Connexion entreprise requise.'
+        );
+
+        $applications = [];
+        if (Container::has('db')) {
+            $applicationRepository = new ApplicationRepository(Container::get('db'));
+            $applications = $applicationRepository->getByCompany((int) $authUser['id'], 50, 0);
+        }
+
+        $this->view('company.applications', [
+            'title' => 'HireIn - Candidatures Recues',
+            'activeNav' => 'offers',
+            'flash' => $this->pullFlash(),
+            'applications' => $applications,
         ]);
     }
 
