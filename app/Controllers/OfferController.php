@@ -199,6 +199,140 @@ final class OfferController extends Controller
         ]);
     }
 
+    // Action qui affiche le formulaire de candidature.
+    public function apply(): void
+    {
+        $auth = $_SESSION['auth'] ?? null;
+        if (!is_array($auth) || ($auth['role'] ?? '') !== 'etudiant') {
+            $this->flashError('Connexion etudiant requise pour candidater.');
+            $this->redirect('/inscription');
+        }
+
+        $offerId = (int) ($_GET['id'] ?? 0);
+        if ($offerId <= 0) {
+            $this->flashError('Offre invalide.');
+            $this->redirect('/offres');
+        }
+
+        $offer = null;
+        if (Container::has('db')) {
+            $offerRepository = new OfferRepository(Container::get('db'));
+            $row = $offerRepository->getById($offerId);
+
+            if (is_array($row)) {
+                $offer = [
+                    'id' => $offerId,
+                    'title' => (string) ($row['title'] ?? ''),
+                    'company_name' => (string) ($row['company_name'] ?? ''),
+                    'city' => (string) ($row['city'] ?? ''),
+                    'contract_type' => $this->formatContractType((string) ($row['contract_type'] ?? '')),
+                ];
+            }
+        }
+
+        if ($offer === null) {
+            $this->flashError('Offre non trouvee.');
+            $this->redirect('/offres');
+        }
+
+        $this->view('offers.apply', [
+            'title' => 'HireIn - Candidature',
+            'activeNav' => 'offers',
+            'offer' => $offer,
+            'old' => $_SESSION['old'] ?? [],
+        ]);
+
+        unset($_SESSION['old']);
+    }
+
+    // Action qui traite la soumission de candidature.
+    public function submitApplication(): void
+    {
+        $auth = $_SESSION['auth'] ?? null;
+        if (!is_array($auth) || ($auth['role'] ?? '') !== 'etudiant') {
+            $this->flashError('Connexion etudiant requise pour candidater.');
+            $this->redirect('/inscription');
+        }
+
+        $offerId = (int) ($_POST['offer_id'] ?? 0);
+        if ($offerId <= 0) {
+            $this->flashError('Offre invalide.');
+            $this->redirect('/offres');
+        }
+
+        if (!Container::has('db')) {
+            $this->flashError('Connexion base de donnees indisponible.');
+            $this->redirect('/offres');
+        }
+
+        $coverLetter = trim((string) ($_POST['cover_letter'] ?? ''));
+        if ($coverLetter === '') {
+            $_SESSION['old'] = $_POST;
+            $this->flashError('Veuillez ecrire une lettre de motivation.');
+            $this->redirect('/offres/candidater?id=' . $offerId);
+        }
+
+        $applicationRepository = new \App\Repositories\ApplicationRepository(Container::get('db'));
+        $studentUserId = (int) $auth['id'];
+
+        // Vérifier si l'étudiant a déjà candidaté à cette offre.
+        if ($applicationRepository->hasApplied($studentUserId, $offerId)) {
+            $this->flashError('Vous avez deja candidate a cette offre.');
+            $this->redirect('/offres');
+        }
+
+        // Traiter l'upload du CV si fourni.
+        $cvPath = null;
+        if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
+            $cvPath = $this->handleCvUpload($_FILES['cv'], $studentUserId);
+            if ($cvPath === null) {
+                $_SESSION['old'] = $_POST;
+                $this->flashError('Erreur lors du telechargement du CV.');
+                $this->redirect('/offres/candidater?id=' . $offerId);
+            }
+        }
+
+        // Créer la candidature.
+        $applicationRepository->create($studentUserId, $offerId, $coverLetter, $cvPath);
+
+        $this->flashSuccess('Candidature envoyee avec succes. Bonne chance!');
+        $this->redirect('/profil/candidatures');
+    }
+
+    /**
+     * Traite l'upload du fichier CV.
+     *
+     * @param array $file
+     * @param int $studentUserId
+     * @return string|null
+     */
+    private function handleCvUpload(array $file, int $studentUserId): ?string
+    {
+        $uploadDir = __DIR__ . '/../../public/uploads/cv/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!in_array($file['type'], $allowedTypes, true)) {
+            return null;
+        }
+
+        $maxSize = 5 * 1024 * 1024; // 5 MB
+        if ($file['size'] > $maxSize) {
+            return null;
+        }
+
+        $filename = 'cv_' . $studentUserId . '_' . time() . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filepath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+            return null;
+        }
+
+        return '/uploads/cv/' . $filename;
+    }
+
     private function formatContractType(string $contractType): string
     {
         return match ($contractType) {
