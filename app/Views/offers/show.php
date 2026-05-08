@@ -81,8 +81,9 @@
         </p>
 
         <div class="detail-actions">
-            <button class="btn-solid" type="button">CV</button>
-            <button class="btn-solid" type="button">Lettre de M</button>
+            <a href="/offres/candidater?id=<?php echo isset($offer) && is_array($offer) && isset($_GET['id']) ? (int) $_GET['id'] : ''; ?>" class="btn-solid" style="display: inline-block; padding: 0.75rem 1.5rem; text-decoration: none; text-align: center;">
+                Postuler à cette offre
+            </a>
         </div>
     </article>
 

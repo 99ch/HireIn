@@ -53,6 +53,8 @@ $router->get('/a-propos', [HomeController::class, 'about']);
 $router->get('/offres', [OfferController::class, 'index']);
 $router->post('/offres/publier', [OfferController::class, 'store']);
 $router->get('/offres/detail', [OfferController::class, 'show']);
+$router->get('/offres/candidater', [OfferController::class, 'apply']);
+$router->post('/offres/candidater', [OfferController::class, 'submitApplication']);
 $router->get('/profils', [ProfileController::class, 'index']);
 $router->get('/entreprises', [CompanyController::class, 'index']);
 $router->get('/inscription', [AuthController::class, 'registerStudent']);
