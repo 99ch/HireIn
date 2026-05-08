@@ -24,11 +24,11 @@
     <div class="site-shell">
         <div class="talent-grid">
             <?php foreach (($talents ?? []) as $talent): ?>
-                <article class="talent-card tone-<?= htmlspecialchars((string) $talent['tone'], ENT_QUOTES, 'UTF-8') ?>">
+                <a class="talent-card tone-<?= htmlspecialchars((string) $talent['tone'], ENT_QUOTES, 'UTF-8') ?>" href="/profils" aria-label="Voir les profils etudiants">
                     <p class="stars"><?= str_repeat('★', (int) $talent['stars']) ?><?= str_repeat('☆', max(0, 5 - (int) $talent['stars'])) ?></p>
                     <h3><?= htmlspecialchars((string) $talent['name'], ENT_QUOTES, 'UTF-8') ?></h3>
                     <p><?= htmlspecialchars((string) $talent['role'], ENT_QUOTES, 'UTF-8') ?></p>
-                </article>
+                </a>
             <?php endforeach; ?>
         </div>
     </div>
@@ -40,9 +40,9 @@
     <div class="slider-row">
         <button class="arrow" type="button">‹</button>
         <div class="poster-grid poster-grid-3">
-            <article class="poster-card tall"></article>
-            <article class="poster-card tall is-main"></article>
-            <article class="poster-card tall"></article>
+            <a class="poster-card tall" href="/offres" aria-label="Voir les offres CDD"></a>
+            <a class="poster-card tall is-main" href="/offres" aria-label="Voir les offres CDD"></a>
+            <a class="poster-card tall" href="/offres" aria-label="Voir les offres CDD"></a>
         </div>
         <button class="arrow" type="button">›</button>
     </div>
@@ -52,10 +52,10 @@
     <h2 class="section-title">Stages professionnels et academiques</h2>
     <p class="section-subtitle">Decouvrez des profils qualifies et des postes adaptes aux jeunes talents.</p>
     <div class="highlight-strip">
-        <article class="mini-offer"></article>
-        <article class="mini-offer"></article>
-        <article class="mini-offer"></article>
-        <article class="mini-offer"></article>
+        <a class="mini-offer" href="/offres" aria-label="Voir les offres de stage"></a>
+        <a class="mini-offer" href="/offres" aria-label="Voir les offres de stage"></a>
+        <a class="mini-offer" href="/offres" aria-label="Voir les offres de stage"></a>
+        <a class="mini-offer" href="/offres" aria-label="Voir les offres de stage"></a>
     </div>
 </section>
 
@@ -74,10 +74,10 @@
     </div>
 
     <div class="highlight-strip wide">
-        <article class="mini-offer"></article>
-        <article class="mini-offer"></article>
-        <article class="mini-offer"></article>
-        <article class="mini-offer"></article>
+        <a class="mini-offer" href="/offres" aria-label="Voir les jobs etudiants"></a>
+        <a class="mini-offer" href="/offres" aria-label="Voir les jobs etudiants"></a>
+        <a class="mini-offer" href="/offres" aria-label="Voir les jobs etudiants"></a>
+        <a class="mini-offer" href="/offres" aria-label="Voir les jobs etudiants"></a>
     </div>
 </section>
 
@@ -87,16 +87,16 @@
     <div class="slider-row">
         <button class="arrow" type="button">‹</button>
         <div class="recruiter-grid">
-            <article></article>
-            <article></article>
-            <article></article>
+            <a href="/entreprises" aria-label="Voir les entreprises"></a>
+            <a href="/entreprises" aria-label="Voir les entreprises"></a>
+            <a href="/entreprises" aria-label="Voir les entreprises"></a>
         </div>
         <button class="arrow" type="button">›</button>
     </div>
 
     <div class="city-grid">
         <?php foreach (($cities ?? []) as $city): ?>
-            <span><?= htmlspecialchars((string) $city, ENT_QUOTES, 'UTF-8') ?></span>
+            <a href="/offres"><span><?= htmlspecialchars((string) $city, ENT_QUOTES, 'UTF-8') ?></span></a>
         <?php endforeach; ?>
     </div>
 
