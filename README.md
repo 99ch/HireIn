@@ -40,6 +40,11 @@ Via phpMyAdmin :
 - Password: (vide si root sans mot de passe)
 - Database: hirein
 
+Option XAMPP (phpMyAdmin):
+- Demarrer Apache + MySQL dans XAMPP
+- Ouvrir http://localhost/phpmyadmin
+- Utiliser les memes identifiants ci-dessus
+
 <h2>Application web « HireIn : Stage, Job étudiant, CDD »</h2>
 
 <p>Le marché de l’emploi au Bénin présente un défi particulier pour les étudiants et les jeunes diplômés qui ont souvent des difficultés à accéder aux opportunités de stages, CDD et emplois étudiants. Sachant qu’une expérience professionnelle ou la clôture d’un cicle universitaire passe d’abord par un stage en entreprise, il devient impératif de résoudre cette problématique pour faciliter aux jeunes comme nous, une immersion sans stress dans la sphère professionnelle en entreprise partout au Bénin. </p>
